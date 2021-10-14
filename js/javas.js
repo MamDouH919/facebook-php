@@ -1,29 +1,106 @@
-function validateEmail() {
-    let x = document.forms["myForm"]["email"].value;
-    let Reg = (/^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z]{2,4})+$/)
-    if (x.match(Reg)) {
-        validatePass();
-    }
-    else{
-        document.getElementById("err1").style.display= 'block';
-        document.getElementById("username").style.border = "1px solid red";
-        document.getElementById("err2").style.display= 'none';
-    }
-    return false;
-    }
+$(document).on('click', "#login", function () {
+    var username = $('#username').val();
+    var loginpass = $('#loginpass').val();
+    // var valid = true;
+    // var user_vaildation = (/^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z]{2,4})+$/);
+    $.post("checkLogin.php",{
+        User : username ,Pass : loginpass
+        },
+        function (data ,status,xhr)
+        {
+            if(data == "err1"){
+            $("#username").css({"border": "1px solid red"});
+            $("#loginpass").css({"border": "1px solid #dddfe2"});
+            $("#err1").css({"display": "block"});
+            $("#err2").css({"display": "none"});
+            $("#Err").html("");
 
-function validatePass() {
-        let x = document.forms["myForm"]["pass"].value;
-        if ( x == ""){
-            document.getElementById("err2").style.display= 'block';
-            document.getElementById("err1").style.display= 'none';
-            document.getElementById("username").style.border = "1px solid #dddfe2";
+                return false;
+            }
+            if(data == "err2"){
+            $("#loginpass").css({"border": "1px solid red"});
+            $("#username").css({"border": "1px solid  #dddfe2"});
+            $("#err1").css({"display": "none"});
+            $("#err2").css({"display": "block"});
+            $("#Err").html("");
+
+                return false;
+            }
+            if(data == "invalid"){
+            $("#loginpass").css({"border": "1px solid #dddfe2"});
+            $("#username").css({"border": "1px solid  #dddfe2"});
+            $("#err1").css({"display": "none"});
+            $("#err2").css({"display": "none"});
+            $("#Err").html("Email or Password you entered invalid");
+                console.log(data)
+                return false;
+            }
+            else {
+                window.location.href = data;
+            }
         }
-        else{
-            window.location = 'login-done.html';
-        }
-        return false;
-    }
+    );
+});
+
+$(document).on('click', "#logout", function () {
+            window.location = 'logout.php';
+});
+
+
+    // if (username=="")
+    //     {
+    //         $("#username").css({"border": "1px solid red"});
+    //         $("#loginpass").css({"border": "1px solid #dddfe2"});
+    //         $("#err1").css({"display": "block"});
+    //         $("#err2").css({"display": "none"});
+    //         valid = false;
+    //         return false;
+    //     }
+    // // if (loginpass=="")
+    // //     {
+    // //         $("#loginpass").css({"border": "1px solid red"});
+    // //         $("#username").css({"border": "1px solid  #dddfe2"});
+    // //         $("#err1").css({"display": "none"});
+    // //         $("#err2").css({"display": "block"});
+    // //         valid = false;
+    // //         return false;
+    // //     }
+
+    // if(valid)
+    // {
+    //     $("#loginpass").css({"border": "1px solid #dddfe2"});
+    //     $("#username").css({"border": "1px solid  #dddfe2"});
+    //     $("#err1").css({"display": "none"});
+    //     $("#err2").css({"display": "none"});
+        
+
+
+// function validateEmail() {
+//     let x = document.forms["myForm"]["email"].value;
+//     let Reg = (/^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z]{2,4})+$/)
+//     if (x.match(Reg)) {
+//         validatePass();
+//     }
+//     else{
+//         document.getElementById("err1").style.display= 'block';
+//         document.getElementById("username").style.border = "1px solid red";
+//         document.getElementById("err2").style.display= 'none';
+//     }
+//     return false;
+//     }
+
+// function validatePass() {
+//         let x = document.forms["myForm"]["pass"].value;
+//         if ( x == ""){
+//             document.getElementById("err2").style.display= 'block';
+//             document.getElementById("err1").style.display= 'none';
+//             document.getElementById("username").style.border = "1px solid #dddfe2";
+//         }
+//         else{
+//             window.location = 'login-done.html';
+//         }
+//         return false;
+//     }
 /////////////////////////////////////////////////////
 // /////////////Already Have account ///////
 /////////////////////////////////////////////////////
@@ -123,7 +200,9 @@ function validatePass2() {
         z.style.border = "1px solid #dddfe2";
 
     }
+/////////////////////////////////////////////////////////////////////
 
+////////////////////////////////////////////////////////////
     $(document).on('click', "#btnsiup", function () {
         var Firstname = $('#fname').val();
         var Lastname = $('#lname').val();
@@ -199,7 +278,43 @@ function validatePass2() {
                 function (data ,status,xhr)
                 {
                     // console.log(gender)
-                    $("#Err-form").html(data)
+                if(data == "Only letters allowed"){
+                    $("#fname").css({"border": "1px solid red"});
+                    $("#Err-form").html(data);
+                    return false;
+                }
+                if(data == "Only letters Allowed"){
+                    $("#lname").css({"border": "1px solid red"});
+                    $("#Err-form").html(data);
+                    return false;
+                }
+                if(data == "Invalid email format"){
+                    $("#-email").css({"border": "1px solid red"});
+                    $("#Err-form").html(data);
+                    return false;
+                }
+                if(data == "Your password must have capital letter and Number and special character ! , $"){
+                    $("#-pass").css({"border": "1px solid red"});
+                    $("#Err-form").html(data);
+                    return false;
+                }
+                if(data == "Your Age must be over 18"){
+                    $("#day").css({"border": "1px solid red"});
+                    $("#month").css({"border": "1px solid red"});
+                    $("#year").css({"border": "1px solid red"});
+                    $("#Err-form").html(data);
+                    return false;
+                }
+                if(data == "Gender is required"){
+                    $("#male").css({"border": "1px solid red"});
+                    $("#female").css({"border": "1px solid red"});
+                    $("#Err-form").html(data);
+                    return false;
+                }
+                if(data == "Your Account has been created"){
+                    $("#Err-form").html(data);
+                }
+
                     console.log(status);
                     console.log(xhr);
                     });

@@ -12,10 +12,27 @@ body {
     color: royalblue;
 }
 .done{
-    display: block;
     text-align: center;
-    margin-top: 25%;
-
+}
+.fullname{
+    text-align: center;
+    margin: 10px;
+}
+.firstname{
+    color: blue;
+    display: inline;
+    margin: 5px;
+}
+.lastname{
+    color: blue;
+    display: inline;
+    margin: 5px;
+}
+.-logout{
+    text-align: center;
+}
+.logout{
+    cursor: pointer;
 }
 /* header */
 .head-page {

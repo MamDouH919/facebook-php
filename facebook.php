@@ -1,7 +1,17 @@
+<?php
+session_start();
+if(isset($_SESSION['id']) && $_SESSION['id'] != "") {
+    header('location:login-done.php');
+} else { 
+    session_unset();
+    session_destroy();
+}
+?>
 <!DOCTYPE html>
 <html>
 <head>
         <meta charset="utf-8"/>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
         <meta name="description" content=""/>
         <meta name="keywords" content=""/>
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -24,20 +34,21 @@
     </div>
     <div class="loginbox">
         <div>
-            <form name="myForm"  onsubmit="return validateEmail()" 
-            onsubmit="return validatePass()" method="post" >
+            <form name="myForm"   method="post" onsubmit="return false">
                 <input type="text" class="username"  autofocus="1" name="email" id="username"
                 placeholder="Email address or phone number" >
                 <div class="err1" id="err1">
                     <p id="email-err">The email address or mobile number you entered isn't connected to an account.
                     <a id="Find-acc" href="#">Find your account and log in.</a></p>
                 </div>
-                <input type="password" class="pass" placeholder="Password" name="pass">
+                <input type="password" class="pass" id="loginpass" placeholder="Password" name="pass">
                 <div class="err1" id="err2">
                     <p id="email-err">The password that you've entered is incorrect.
                     <a id="Find-acc" href="#"> Forgotten password?</a></p>
                 </div>
-                <button class="login" type="submit" >log in</button>
+                <button class="login" id="login">log in</button>
+                <span class="error" id="Err" 
+                style="color: red;margin-bottom: 20px;"></span>
             </form>
         </div>
         <a href="#" class="fpass">Forgotten password?</a>
