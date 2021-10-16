@@ -1,3 +1,7 @@
+<?php 
+require_once ('conn.php');
+include("function.php");
+?>
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -9,7 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $lname = test_input($_POST["lname"]);
         if (!preg_match("/^[a-zA-Z]*$/",$lname)) {
-          echo "Only letters allowed";
+          echo "Only letters Allowed";
           exit;
         }
       
@@ -20,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         $pass = test_input($_POST["pass"]);
-        if (!preg_match("/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!$])[a-zA-Z0-9!$ ]{8,15}$/",$pass)) {
+        if (!preg_match("/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!$])[a-zA-Z0-9!$ ]{8,20}$/",$pass)) {
           echo "Your password must have capital letter and Number and special character ! , $";
           exit;
         }
@@ -42,31 +46,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         insertDB($fname ,$lname,$email,$pass,$gender,$date);
       }
     }
-function test_input($data) {
-  $data = trim($data);
-  $data = stripslashes($data);
-  $data = htmlspecialchars($data);
-  return $data;
-}
-function insertDB($fname ,$lname, $email , $pass ,$gender,$date){
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "users";
 
+function insertDB($fname ,$lname, $email , $pass ,$gender,$date){
+  // include("db.php");
 try {
-  $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-  // set the PDO error mode to exception
-  $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+  $db = DB::getInstance();
+	DB::setCharsetEncoding();
+  $enc = sha1($pass);
   $sql = "INSERT INTO Guests (firstname,lastname, email,pass ,gender ,birthday)
-  VALUES ( '$fname','$lname' , '$email' , '$pass' ,'$gender','$date')";
+  VALUES ( '$fname','$lname' , '$email' , '$enc' ,'$gender','$date')";
   // use exec() because no results are returned
-  $conn->exec($sql);
+  $db->exec($sql);
   echo "Your Account has been created";
 } catch(PDOException $e) {
   echo $sql . "<br>" . $e->getMessage();
 }
-
-$conn = null;
+$db = null;
 }
 ?>

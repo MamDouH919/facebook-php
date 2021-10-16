@@ -1,19 +1,14 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-
+require_once ('conn.php');
 try {
-  $conn = new PDO("mysql:host=$servername", $username, $password);
-  // set the PDO error mode to exception
-  $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+  $db = DB::getInstance();
+	    DB::setCharsetEncoding();
   $sql = "CREATE DATABASE users";
   // use exec() because no results are returned
-  $conn->exec($sql);
+  $db->exec($sql);
   echo "Database created successfully<br>";
 } catch(PDOException $e) {
   echo $sql . "<br>" . $e->getMessage();
 }
-
-$conn = null;
+$db = null;
 ?>

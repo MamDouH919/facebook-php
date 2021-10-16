@@ -1,6 +1,7 @@
 <?php 
 session_start(); 
-include("db.php");
+require_once ('conn.php');
+include("function.php");
 ?>
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") 
@@ -18,6 +19,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
   else {
     $enc = sha1($pass);
     try {
+      $db = DB::getInstance();
+	    DB::setCharsetEncoding();
       $query = "SELECT * FROM Guests WHERE email = :user AND pass = :enc";
       $stmt = $db->prepare($query);
       $stmt->bindvalue('user', $user, PDO::PARAM_STR);
@@ -44,11 +47,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 else {
   header('location: login-done.php');
 }
-function test_input($data) {
-  $data = trim($data);
-  $data = stripslashes($data);
-  $data = htmlspecialchars($data);
-  return $data;
-}
+
   
 ?>
